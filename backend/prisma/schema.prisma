@@ -1,0 +1,185 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  email       String   @unique
+  password    String
+  fullName    String?
+  avatar      String?
+  bio         String?
+  totalPoints Int      @default(0)
+  streak      Int      @default(0)
+  lastActive  DateTime @default(now())
+  role        String   @default("user")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  progress              Progress[]
+  quizResults           QuizResult[]
+  challengeParticipants ChallengeParticipant[]
+  sentMessages          Message[]    @relation("SentMessages")
+  receivedMessages      Message[]    @relation("ReceivedMessages")
+  notifications         Notification[]
+  homeworkSubmissions   HomeworkSubmission[]
+}
+
+model Topic {
+  id           Int      @id @default(autoincrement())
+  slug         String   @unique
+  title        String
+  titleEn      String
+  description  String
+  level        Int
+  parentId     Int?
+  parent       Topic?   @relation("TopicChildren", fields: [parentId], references: [id])
+  children     Topic[]  @relation("TopicChildren")
+  lessonPoints Int      @default(10)
+  quizPoints   Int      @default(20)
+  order        Int
+  icon         String?
+  color        String?
+  estimatedMin Int      @default(30)
+
+  progress     Progress[]
+  quizzes      Quiz[]
+  homeworks    Homework[]
+}
+
+model Progress {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  topicId      Int
+  lessonDone   Boolean  @default(false)
+  quizPassed   Boolean  @default(false)
+  bestScore    Int      @default(0)
+  completedAt  DateTime?
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic        Topic    @relation(fields: [topicId], references: [id])
+
+  @@unique([userId, topicId])
+}
+
+model Quiz {
+  id        Int        @id @default(autoincrement())
+  topicId   Int
+  topic     Topic      @relation(fields: [topicId], references: [id])
+  questions Question[]
+  results   QuizResult[]
+}
+
+model Question {
+  id          Int     @id @default(autoincrement())
+  quizId      Int
+  quiz        Quiz    @relation(fields: [quizId], references: [id])
+  text        String
+  type        String
+  options     String?
+  answer      String
+  explanation String?
+  order       Int     @default(0)
+}
+
+model QuizResult {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  quizId       Int
+  score        Int
+  totalQ       Int
+  passed       Boolean
+  earnedPoints Int      @default(0)
+  completedAt  DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quiz         Quiz     @relation(fields: [quizId], references: [id])
+}
+
+model Challenge {
+  id           Int      @id @default(autoincrement())
+  title        String
+  description  String
+  requirements String?
+  difficulty   String
+  type         String   @default("coding")
+  language     String   @default("any")
+  startDate    DateTime
+  endDate      DateTime
+  points       Int      @default(50)
+  status       String   @default("upcoming")
+  createdAt    DateTime @default(now())
+
+  participants ChallengeParticipant[]
+}
+
+model ChallengeParticipant {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  challengeId  Int
+  githubUrl    String?
+  language     String?
+  repoName     String?
+  verified     Boolean  @default(false)
+  score        Int      @default(0)
+  earnedPoints Int      @default(0)
+  joinedAt     DateTime @default(now())
+  submittedAt  DateTime?
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge    Challenge @relation(fields: [challengeId], references: [id])
+
+  @@unique([userId, challengeId])
+}
+
+model Homework {
+  id          Int      @id @default(autoincrement())
+  topicId     Int
+  title       String
+  description String
+  difficulty  String   @default("medium")
+  points      Int      @default(20)
+  topic       Topic    @relation(fields: [topicId], references: [id])
+  submissions HomeworkSubmission[]
+  createdAt   DateTime @default(now())
+}
+
+model HomeworkSubmission {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  homeworkId  Int
+  githubUrl   String
+  repoName    String?
+  verified    Boolean  @default(false)
+  points      Int      @default(0)
+  submittedAt DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  homework    Homework @relation(fields: [homeworkId], references: [id])
+
+  @@unique([userId, homeworkId])
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  senderId   Int
+  receiverId Int
+  content    String
+  read       Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String
+  title     String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

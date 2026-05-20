@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item -ItemType Directory -Path \"C:\\\\Users\\\\asus\\\\Desktop\\\\GrafikFinal\\\\frontend\\\\src\\\\store\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"C:\\\\Users\\\\asus\\\\Desktop\\\\GrafikFinal\\\\frontend\\\\src\\\\api\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"C:\\\\Users\\\\asus\\\\Desktop\\\\GrafikFinal\\\\frontend\\\\src\\\\pages\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"C:\\\\Users\\\\asus\\\\Desktop\\\\GrafikFinal\\\\frontend\\\\src\\\\components\" -Force)",
+      "PowerShell(New-Item -ItemType Directory -Path \"C:\\\\Users\\\\asus\\\\Desktop\\\\GrafikFinal\\\\frontend\\\\src\\\\types\" -Force)",
+      "Bash(powershell -Command \"\\(Get-Content ChallengesPage.tsx\\) -replace 'GitBranchUrl', 'githubUrl' -replace 'setGitBranchUrl', 'setGithubUrl' -replace 'submitGitBranch', 'submitGithub' | Set-Content ChallengesPage.tsx\")",
+      "Bash(powershell -Command '@ *)",
+      "Bash(powershell -Command \"\\(Get-Content LessonPage.tsx\\) -replace 'GitBranchUrl', 'githubUrl' -replace 'GitBranch Repo Linki', 'GitHub Repo Linki' -replace 'GitBranch\\\\.com', 'github.com' -replace 'GitBranch API', 'GitHub API' | Set-Content LessonPage.tsx\")",
+      "Bash(npm run *)",
+      "Bash(npx tsc *)"
+    ]
+  }
+}

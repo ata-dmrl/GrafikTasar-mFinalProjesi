@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme {
+  /* ReacType — Koyu Lacivert + Mavi + Cyan paleti */
+  --color-slate-950: #030810;
+  --color-slate-900: #050D1A;
+  --color-slate-800: #091525;
+  --color-slate-750: #0C1B30;
+  --color-slate-700: #0F2040;
+  --color-slate-600: #1A3358;
+  --color-slate-500: #2A4870;
+  --color-slate-400: #7AA0C4;
+  --color-slate-300: #A8C5E0;
+  --color-slate-200: #D0E4F5;
+  --color-slate-100: #EAF3FC;
+
+  --color-indigo-900: #08174A;
+  --color-indigo-800: #0E2470;
+  --color-indigo-700: #0A3FD0;
+  --color-indigo-600: #1756FF;
+  --color-indigo-500: #3B7FFF;
+  --color-indigo-400: #00B8FF;
+  --color-indigo-300: #5ACDFF;
+  --color-indigo-200: #A0E2FF;
+  --color-indigo-100: #D6F3FF;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: #050D1A;
+  color: #e2e8f0;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.code-block {
+  font-family: 'Fira Code', 'Cascadia Code', 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #050D1A;
+}
+::-webkit-scrollbar-thumb {
+  background: #1A3358;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2A4870;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes routePulse {
+  0% { box-shadow: 0 0 0 0 rgba(0,184,255,0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(0,184,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,184,255,0); }
+}
+.route-pulse {
+  animation: routePulse 2s infinite;
+}
+
+@keyframes glowBlue {
+  0%, 100% { box-shadow: 0 0 8px rgba(23,86,255,0.3); }
+  50% { box-shadow: 0 0 20px rgba(23,86,255,0.6); }
+}
+
+.progress-bar {
+  transition: width 0.5s ease-in-out;
+}
+
+.topic-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.topic-card:hover {
+  transform: translateY(-2px);
+}
+
+/* Route glow effect for active nav items */
+.nav-active-glow {
+  box-shadow: 0 0 12px rgba(23,86,255,0.4), inset 0 0 12px rgba(0,184,255,0.05);
+}
+
+/* Cyan accent border */
+.cyan-border {
+  border-color: #00B8FF;
+}
